@@ -3,8 +3,8 @@ const http = require('http');
 
 // -----Synchronous JavaScript---------------------------------------------
 
-// const textIn = fs.readFileSync('./text/input.text', 'utf-8');
-// console.log(textIn);
+const textIn = fs.readFileSync('./text/input.text', 'utf-8');
+console.log(textIn);
 
 // const textOut = `This is what we know about avocado ${textIn}.\nCreated on  ${Date.now()}`;
 
