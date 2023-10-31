@@ -1,6 +1,8 @@
 const fs = require('fs');
 const superagent = require('superagent');
 
+//---------------------------------------------------------------------------------
+
 // fs.readFile(`${__dirname}/../../text/dog.txt`, 'utf-8', (err, data) => {
 // console.log(`Breed : ${data}`);
 
@@ -67,26 +69,57 @@ const writeFilePro = (file, data) => {
 
 //Chaining all the three promises together
 
-readFilePro(`${__dirname} /../../ text / dog.txt`) // Returns a promise so we can use the .then( ) method on it
-    //This is the first promise which is returned by the readFilePro method and using that data we are calling the api using superagent modulue.
-    .then(data => {
-        console.log(`Breed : ${data}`);
-        return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`); // Returns a promise.
-    })
-    //This is the second promise returned by the .get() method which on resolving the promise returns a random dog image
-    .then(res => {
-        console.log(res.body.message);
-        writeFilePro("../../text/dog-image.txt", res.body.message);//Returns a promise therefore .then() method can be used.
-    })
-    //This is the third promise which is returned by the writeFilePro method which on resolving successfully doesn't return any data as such 
-    .then(() => {
-        console.log("Random dog image saved!");
-    }) //No promise is returned here marking the end of the promise chain
+// readFilePro(`${__dirname} /../../ text / dog.txt`) // Returns a promise so we can use the .then( ) method on it
+//This is the first promise which is returned by the readFilePro method and using that data we are calling the api using superagent modulue.
+// .then(data => {
+//     console.log(`Breed : ${data}`);
+//     return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`); // Returns a promise.
+// })
+//This is the second promise returned by the .get() method which on resolving the promise returns a random dog image
+// .then(res => {
+//     console.log(res.body.message);
+//     writeFilePro("../../text/dog-image.txt", res.body.message);//Returns a promise therefore .then() method can be used.
+// })
+//This is the third promise which is returned by the writeFilePro method which on resolving successfully doesn't return any data as such 
+// .then(() => {
+//     console.log("Random dog image saved!");
+// }) //No promise is returned here marking the end of the promise chain
 
-    //A single catch method can be used to handle all the errors present at different levels.
-    .catch(err => {
-        console.log(err);
-    });
+//A single catch method can be used to handle all the errors present at different levels.
+// .catch(err => {
+//     console.log(err);
+// });
 
 //----------------------------------------------------------------------------------
 //Using async await to create and resolve promises
+
+
+const getDogPic = async () => {
+    try {
+        const breed = await readFilePro(`${__dirname} /../../text/dog.txt`);//Waiting for the breed name 
+        console.log(`Breed : ${breed}`);
+
+        // const res = await superagent.get(`https://dog.ceo/api/breed/${breed}/images/random`); //Waiting for a response from the api
+        // const dogImg = res.body.message; //Saving the image in a variable
+        // console.log(dogImg);
+
+        //Resolving multiple promises at the same time
+
+        // Getting three responses from the api
+        const pro1 = superagent.get(`https://dog.ceo/api/breed/${breed}/images/random`);
+        const pro2 = superagent.get(`https://dog.ceo/api/breed/${breed}/images/random`);
+        const pro3 = superagent.get(`https://dog.ceo/api/breed/${breed}/images/random`);
+
+        const all = await Promise.all([pro1, pro2, pro3]); //Resolving all the three promises at the same time
+
+        const imgs = all.map(el => el.body.message);//Extracting the three images from the responses
+        console.log(imgs);
+
+        await writeFilePro("../../text/dog-image.txt", imgs.join('\n'));//Waiting for the data to be written in the file
+        console.log("Random dog image saved!");
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+getDogPic();//calling the asynchronous function which runs in the background till all the tasks are completed
