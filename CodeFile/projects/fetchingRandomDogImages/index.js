@@ -122,4 +122,4 @@ const getDogPic = async () => {
         console.log(err);
     }
 }
-getDogPic();//calling the asynchronous function which runs in the background till all the tasks are completed
+getDogPic();//calling the asynchronous function which runs in the background till all the tasks are completed.This won't block any piece of code written below it. This function return a promise hence then() method can be used or another async await to do another task.
