@@ -1,7 +1,8 @@
-const fs = require('fs');
 const express = require('express');
+
 const tourRouter = require('./routes/toursRoute');
 const userRouter = require('./routes/usersRoute');
+
 const app = express();
 
 
@@ -20,16 +21,6 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
-
-//---------------------------------------------------------------------------------
-
-
-
-
-
-//--------------------------------------------------------------------------------
-
-
 
 //----------------------------------------------------------------------------------
 
@@ -55,14 +46,4 @@ app.use('/api/v1/users', userRouter);
 
 //----------------------------------------------------------------------------------
 
-
-
-
-
-//-----------------------------------------------------------------------------------
-
-//This code is to setup the server to listen to any requests on port 3000 and then respond to the requests as directed . 
-const port = 3000;
-app.listen(port, () => {
-    console.log(`App running on port ${port} .....`);
-});
+module.exports = app;
